@@ -1,5 +1,7 @@
 package employees.basic;
 
+import employees.common.ConnectionFactory;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;

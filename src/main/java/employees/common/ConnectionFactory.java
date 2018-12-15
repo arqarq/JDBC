@@ -1,11 +1,11 @@
-package employees.basic;
+package employees.common;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-class ConnectionFactory {
-    static Connection getConnection() throws SQLException {
+public class ConnectionFactory {
+    public static Connection getConnection() throws SQLException {
             return DriverManager.getConnection(
 //                "jdbc:mysql://localhost/employees?serverTimezone=UTC&useSSL=false",
                     "jdbc:mysql://localhost/employees" +
