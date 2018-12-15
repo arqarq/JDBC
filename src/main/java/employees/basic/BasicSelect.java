@@ -1,21 +1,20 @@
 package employees.basic;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class BasicSelect {
+    private static final String query = "SELECT first_name, last_name FROM employees LIMIT 10";
 
-    static final String query = "SELECT first_name, last_name FROM employees LIMIT 10";
     public static void main(String[] args) throws SQLException {
-        Connection conn = DriverManager.getConnection(
-                "jdbc:mysql://localhost/employees",
-                "sda",
-                "JavaKat_9");
+        Connection conn = ConnectionFactory.getConnection();
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery(query);
-        while(rs.next()) {
+        while (rs.next()) {
             System.out.println(rs.getString("first_name") + " " + rs.getString("last_name"));
         }
-
         rs.close();
         stmt.close();
         conn.close();
