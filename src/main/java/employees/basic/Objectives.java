@@ -20,6 +20,8 @@ public class Objectives {
         System.out.println("----------------");
         objective5("Maliniak");
         System.out.println("----------------");
+        objective6();
+        System.out.println("----------------");
         objective7();
         System.out.println("----------------");
 //        objective8();
@@ -48,6 +50,7 @@ public class Objectives {
             rs.close();
         } catch (SQLException e) {
             System.out.println(e.getErrorCode());
+            waitForMili(100);
         }
     }
 
@@ -75,6 +78,7 @@ public class Objectives {
             rs.close();
         } catch (SQLException e) {
             System.out.println(e.getErrorCode());
+            waitForMili(100);
         }
     }
 
@@ -101,6 +105,7 @@ public class Objectives {
             rs.close();
         } catch (SQLException e) {
             System.out.println(e.getErrorCode());
+            waitForMili(100);
         }
     }
 
@@ -118,10 +123,54 @@ public class Objectives {
             rs.close();
         } catch (SQLException e) {
             System.out.println(e.getErrorCode());
+            waitForMili(100);
         }
     }
 
-    private static synchronized void objective7() {
+    private static void objective6() {
+        try (Connection conn = ConnectionFactory.getConnection();
+             Statement stmt = conn.createStatement()
+        ) {
+            ResultSet rs;
+            String best = "WITH best AS\n" +
+                    "\t(SELECT s.emp_no, to_date, salary\n" +
+                    "\tFROM salaries s\n" +
+                    "    WHERE to_date = '9999-01-01' \n" +
+                    "    ORDER BY salary DESC\n" +
+                    "    LIMIT 1)\n" +
+                    "SELECT first_name, last_name\n" +
+                    "FROM employees\n" +
+                    "WHERE emp_no IN (\n" +
+                    "\tSELECT emp_no \n" +
+                    "    FROM best)";
+            String worst = "WITH worst AS\n" +
+                    "\t(SELECT *\n" +
+                    "\tFROM salaries\n" +
+                    "    WHERE to_date = '9999-01-01' \n" +
+                    "    ORDER BY salary ASC\n" +
+                    "    LIMIT 1)\n" +
+                    "SELECT first_name, last_name\n" +
+                    "FROM employees\n" +
+                    "WHERE emp_no IN (\n" +
+                    "\tSELECT emp_no \n" +
+                    "    FROM worst)";
+
+            rs = stmt.executeQuery(best);
+            rs.next();
+            System.out.println("Best paid man: " + rs.getString("first_name") +
+                    " " + rs.getString("last_name"));
+            rs = stmt.executeQuery(worst);
+            rs.next();
+            System.out.println("Worst paid man: " + rs.getString("first_name") +
+                    " " + rs.getString("last_name"));
+            rs.close();
+        } catch (SQLException e) {
+            System.err.println("SQL error code: " + e.getErrorCode());
+            waitForMili(100);
+        }
+    }
+
+    private static void objective7() {
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement addDept = conn.prepareStatement("INSERT INTO " +
                      "departments " +
