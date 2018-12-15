@@ -14,7 +14,7 @@ public class Objectives {
         System.out.println("----------------");
         objective4("Customer Service");
         System.out.println("----------------");
-
+        objective5("Maliniak");
     }
 
     private static void objective2(String... query) {
@@ -81,6 +81,23 @@ public class Objectives {
             rs = stmt2.executeQuery();
             rs.next();
             System.out.println(rs.getString(1) + " " + rs.getString(2));
+            rs.close();
+        } catch (SQLException e) {
+            System.out.println(e.getErrorCode());
+        }
+    }
+
+    private static void objective5(String last_name) {
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement("SELECT emp_no, first_name FROM employees " +
+                     "WHERE last_name = ?")) {
+            ResultSet rs;
+
+            stmt.setString(1, last_name);
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                System.out.println(rs.getString("emp_no") + " " + rs.getString("first_name"));
+            }
             rs.close();
         } catch (SQLException e) {
             System.out.println(e.getErrorCode());
