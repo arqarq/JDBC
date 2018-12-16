@@ -3,8 +3,9 @@ package employees.basic;
 import employees.common.ConnectionFactory;
 
 import java.sql.*;
-import java.util.Arrays;
-import java.util.concurrent.TimeUnit;
+
+import static employees.basic.Excercise9.objective9;
+import static employees.common.HelperMethods.waitForMili;
 
 public class Objectives {
     public static void main(String[] args) {
@@ -27,15 +28,8 @@ public class Objectives {
         objective4("PR");
         System.out.println("----------------");
         objective8("PR");
-    }
-
-    private static void waitForMili(long delay) {
-        try {
-            TimeUnit.MILLISECONDS.sleep(delay);
-        } catch (InterruptedException e1) {
-            System.err.println(Arrays.toString(e1.getStackTrace()));
-            waitForMili(100);
-        }
+        System.out.println("----------------");
+        objective9("Marketing", 55554);
     }
 
     private static void objective2(String... query) {
